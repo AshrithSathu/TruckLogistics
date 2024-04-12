@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 
-import { Button } from "../../ui/button";
+import { Button } from "../ui/button";
 import {
   DropdownMenuTrigger,
   DropdownMenuLabel,
@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuContent,
   DropdownMenu,
-} from "../../ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import {
   TableHead,
   TableRow,
@@ -17,55 +17,72 @@ import {
   TableCell,
   TableBody,
   Table,
-} from "../../ui/table";
+} from "../ui/table";
 // import { Badge } from "../../Components/ui/badge";
 import { useEffect, useState } from "react";
-import AddUserModal from "../addusermodal/AddUserModal";
+import AddUserModal from "./AddUsermodal";
 // import { authToken } from "../../Auth/Auth";
 import { useCookies } from "react-cookie";
 
 export default function List() {
   // const [showModal, setShowModal] = useState(false);
-  const [manager, setManagers] = useState([]);
+  const [drivers, setDrivers] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies();
 
+  const handleLogout = async (id: any) => {
+    removeCookie("authToken");
+    removeCookie("Email");
+    window.location.href = "/auth";
+  };
+
+  const getData = async () => {
+    try {
+      console.log("hello");
+      // Encode the manager's email to ensure it's safe to include in a URL
+      const managerEmail = cookies.Email;
+      console.log(managerEmail);
+      // const url = `http://localhost:4000/manager/getAllDriver/${managerEmail}`;
+      const url = `http://localhost:4000/manager/getAllDriver/${encodeURIComponent(
+        managerEmail
+      )}`;
+      console.log(url);
+
+      const response = await fetch(url, {
+        method: "GET", // Correct method
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // Removed the body property since GET requests cannot have a body
+      });
+      console.log(response);
+      const data = await response.json();
+      console.log(data);
+      const drivers = data.data.driver;
+      console.log(drivers);
+      setDrivers(drivers);
+    } catch (e) {
+      console.error(e);
+    }
+  };
   // console.log(manager);
   useEffect(() => {
     getData();
-  }, [setManagers]);
+  }, [setDrivers]);
 
   // console.log(manager);
   //handleDelete
-  const getData = async () => {
-    try {
-      // Updated URL to match the new backend route
-      const response = await fetch("http://localhost:4000/admin/manager/");
-      const data = await response.json();
-      const answer = data.data.manager;
-      console.log(answer);
-      console.log("hello");
-      setManagers(answer);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      // Updated URL to match the new backend route
-      const response = await fetch(
-        `http://localhost:4000/admin/manager/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-      getData(); // Refresh the data
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const handleDelete = async (id: any) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:4000//${id}`, {
+  //       method: "DELETE",
+  //     });
+  //     const data = await response.json();
+  //     console.log(data);
+  //     getData();
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   return (
     <div className="grid min-h-screen w-full grid-cols-[280px_1fr]">
@@ -92,7 +109,7 @@ export default function List() {
                 to="#"
               >
                 <UsersIcon className="h-4 w-4" />
-                Managers
+                Drivers
               </Link>
               {/* <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
@@ -146,14 +163,14 @@ export default function List() {
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Link to="/">Logout</Link>
+                <Link onClick={handleLogout}>Logout</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="flex items-center">
-            <h1 className="font-semibold text-lg md:text-2xl">Managers</h1>
+            <h1 className="font-semibold text-lg md:text-2xl">Drivers</h1>
             {/* <Button className="ml-auto scale-95 border-black " size="sm">
               Add User
             </Button> */}
@@ -169,8 +186,8 @@ export default function List() {
               <TableHeader>
                 <TableRow>
                   <TableHead className=" bg-black">Name</TableHead>
-                  <TableHead className=" bg-black">Email</TableHead>
-                  <TableHead className=" bg-black">Branch</TableHead>
+                  <TableHead className=" bg-black">Salary</TableHead>
+                  <TableHead className=" bg-black">License</TableHead>
                   <TableHead className=" bg-black">Contact</TableHead>
                   <TableHead className="text-right bg-black">Actions</TableHead>
                 </TableRow>
@@ -247,12 +264,12 @@ export default function List() {
                 </TableRow>
               </TableBody> */}
               <TableBody>
-                {manager.map((item) => {
+                {drivers.map((item) => {
                   return (
-                    <TableRow key={item.manager_id}>
+                    <TableRow key={item.driver_id}>
                       <TableCell className="font-medium">{item.name}</TableCell>
-                      <TableCell>{item.email_id}</TableCell>
-                      <TableCell>{item.branch}</TableCell>
+                      <TableCell>{item.salary}</TableCell>
+                      <TableCell>{item.license}</TableCell>
                       <TableCell>{item.contact}</TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
@@ -266,7 +283,7 @@ export default function List() {
                             {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
                             {/* <DropdownMenuItem>Update</DropdownMenuItem> */}
                             <DropdownMenuItem
-                              onClick={() => handleDelete(item.manager_id)}
+                            // onClick={() => handleDelete(item.manager_id)}
                             >
                               Delete
                             </DropdownMenuItem>

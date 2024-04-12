@@ -14,7 +14,7 @@ export function Auth() {
 
   // console.log(cookies);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (email === "" || password === "") {
       setError("Please fill in all fields");
@@ -29,12 +29,15 @@ export function Auth() {
     });
     const data = await response.json();
 
-    if (data.detail) {
-      setError(data.detail);
+    if (!response.ok) {
+      // Assuming the backend sends a 401 status code for invalid credentials
+      const errorMessage =
+        data.message || "An error occurred. Please try again.";
+      setError(errorMessage);
     } else {
-      setCookie("Email", data.email);
-      setCookie("authToken", data.token);
-      window.location.href = "/manager";
+      setCookie("Email", data.email, { path: "/" });
+      setCookie("authToken", data.token, { path: "/" });
+      window.location.href = "/Manager";
     }
   };
 
