@@ -10,14 +10,6 @@ import {
 } from "../../ui/card";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
-import {
-  DropdownMenuTrigger,
-  DropdownMenuRadioItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuContent,
-  DropdownMenu,
-} from "../../ui/dropdown-menu";
-import { RadioGroupItem, RadioGroup } from "../../ui/radio-group";
 import { useState } from "react";
 
 export default function AddUserModal() {
