@@ -1,5 +1,5 @@
-import { Button } from "../ui/button";
-import { DialogTrigger, DialogContent, Dialog } from "../ui/dialog";
+import { Button } from "../../ui/button";
+import { DialogTrigger, DialogContent, Dialog } from "../../ui/dialog";
 import {
   CardTitle,
   CardDescription,
@@ -7,22 +7,22 @@ import {
   CardContent,
   CardFooter,
   Card,
-} from "../ui/card";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+} from "../../ui/card";
+import { Label } from "../../ui/label";
+import { Input } from "../../ui/input";
 import {
   DropdownMenuTrigger,
   DropdownMenuRadioItem,
   DropdownMenuRadioGroup,
   DropdownMenuContent,
   DropdownMenu,
-} from "../ui/dropdown-menu";
-import { RadioGroupItem, RadioGroup } from "../ui/radio-group";
+} from "../../ui/dropdown-menu";
+import { RadioGroupItem, RadioGroup } from "../../ui/radio-group";
 import { useState } from "react";
 
 export default function AddUsermodal() {
   const [gender, setGender] = useState("");
-  const [managerId, setManagerId] = useState("");
+  const [driverId, setDriverId] = useState("");
   const [name, setName] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [aadhaarNumber, setAadhaarNumber] = useState("");
@@ -34,7 +34,7 @@ export default function AddUsermodal() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const userData = {
-      managerId,
+      driverId,
       name,
       gender,
       contactNumber,
@@ -48,7 +48,7 @@ export default function AddUsermodal() {
 
     // Example POST request with fetch API
     try {
-      const response = await fetch(`http://localhost:4000/manager/`, {
+      const response = await fetch(`http://localhost:4000/manager/addDriver/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,20 +77,20 @@ export default function AddUsermodal() {
       <DialogContent className="p-0">
         <Card>
           <CardHeader className="p-4">
-            <CardTitle>Add Manager</CardTitle>
+            <CardTitle>Add Driver</CardTitle>
             <CardDescription>
-              Add the employee's information and click Save.
+              Add the driver information and click Save.
             </CardDescription>
           </CardHeader>
           <CardContent className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="manager-id">Manager ID</Label>
+                <Label htmlFor="manager-id">Driver ID</Label>
                 <Input
                   id="manager-id"
                   placeholder="Manager ID"
-                  value={managerId}
-                  onChange={(e) => setManagerId(e.target.value)}
+                  value={driverId}
+                  onChange={(e) => setDriverId(e.target.value)}
                   required
                 />
               </div>

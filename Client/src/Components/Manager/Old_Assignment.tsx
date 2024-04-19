@@ -25,9 +25,9 @@ import AddUserModal from "./AddUsermodal/AddUsermodal";
 import { useCookies } from "react-cookie";
 import { LineChartIcon, SettingsIcon } from "lucide-react";
 
-export default function List() {
+export default function Assignment() {
   // const [showModal, setShowModal] = useState(false);
-  const [drivers, setDrivers] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies();
 
   const handleLogout = async (id: any) => {
@@ -35,7 +35,7 @@ export default function List() {
     removeCookie("Email");
     window.location.href = "/auth";
   };
-
+  // vehicle_id | license_plate |         model          | commissioned_on | mileage |  branch
   const getData = async () => {
     try {
       console.log("hello");
@@ -43,7 +43,7 @@ export default function List() {
       const managerEmail = cookies.Email;
       console.log(managerEmail);
       // const url = `http://localhost:4000/manager/getAllDriver/${managerEmail}`;
-      const url = `http://localhost:4000/manager/getAllDriver/${encodeURIComponent(
+      const url = `http://localhost:4000/manager/getOldAssignment/${encodeURIComponent(
         managerEmail
       )}`;
       console.log(url);
@@ -55,38 +55,38 @@ export default function List() {
         },
         // Removed the body property since GET requests cannot have a body
       });
-      console.log(response);
+      // console.log(response);
       const data = await response.json();
-      console.log(data);
-      const drivers = data.data.driver;
-      console.log(drivers);
-      setDrivers(drivers);
+      //   console.log(data);
+      const vechiles = data.data.oldassignments;
+      console.log(vechiles);
+      setVehicles(vechiles);
     } catch (e) {
-      console.error(e);
+      //   console.error(e);
     }
   };
   // console.log(manager);
   useEffect(() => {
     getData();
-  }, [setDrivers]);
+  }, [setVehicles]);
 
   // console.log(manager);
-  //handleDelete
-  const handleDelete = async (id: any) => {
-    try {
-      const response = await fetch(
-        `http://localhost:4000/manager/driver/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-      getData();
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // //handleDelete
+  // const handleDelete = async (id: any) => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:4000/manager/driver/${id}`,
+  //       {
+  //         method: "DELETE",
+  //       }
+  //     );
+  //     const data = await response.json();
+  //     console.log(data);
+  //     getData();
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   return (
     <div className="grid min-h-screen w-full grid-cols-[280px_1fr]">
@@ -110,11 +110,12 @@ export default function List() {
             <nav className="grid items-start px-4 text-sm font-medium">
               <Link
                 className="flex items-center gap-3 rounded-lg bg-black-100 px-3 py-2 text-gray-900 transition-all hover:text-gray-900 dark:text-gray-50 dark:hover:text-gray-50"
-                to="#"
+                to="/Manager"
               >
                 <UsersIcon className="h-4 w-4" />
                 Drivers
               </Link>
+
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
                 to="/Manager/driver"
@@ -124,7 +125,7 @@ export default function List() {
               </Link>
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                to="/Manager/vehicle"
+                to="#"
               >
                 <SettingsIcon className="h-4 w-4" />
                 Vehicles
@@ -166,7 +167,7 @@ export default function List() {
               </Link>
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                to="/Manager/OldAssignment"
+                to="#"
               >
                 <SettingsIcon className="h-4 w-4" />
                 Old Assignment
@@ -218,7 +219,9 @@ export default function List() {
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="flex items-center">
-            <h1 className="font-semibold text-lg md:text-2xl">Drivers</h1>
+            <h1 className="font-semibold text-lg md:text-2xl">
+              Old Assignments
+            </h1>
             {/* <Button className="ml-auto scale-95 border-black " size="sm">
               Add User
             </Button> */}
@@ -233,126 +236,54 @@ export default function List() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className=" bg-black">Name</TableHead>
-                  <TableHead className=" bg-black">Salary</TableHead>
-                  <TableHead className=" bg-black">License</TableHead>
-                  <TableHead className=" bg-black">Contact</TableHead>
+                  <TableHead className=" bg-black">assignment_id</TableHead>
+                  <TableHead className=" bg-black">vehicle_id</TableHead>
+                  <TableHead className=" bg-black">driver_id</TableHead>
+                  <TableHead className=" bg-black">route_id</TableHead>
+                  <TableHead className=" bg-black">start_date</TableHead>
+                  <TableHead className=" bg-black">return_date</TableHead>
+                  <TableHead className=" bg-black">status</TableHead>
                   <TableHead className="text-right bg-black">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-
               <TableBody>
-                {drivers.map(
-                  (item: {
-                    driver_id: number;
-                    name: string;
-                    salary: number;
-                    license: string;
-                    contact: string;
-                  }) => {
-                    return (
-                      <TableRow key={item.driver_id}>
-                        <TableCell className="font-medium">
-                          {item.name}
-                        </TableCell>
-                        <TableCell>{item.salary}</TableCell>
-                        <TableCell>{item.license}</TableCell>
-                        <TableCell>{item.contact}</TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button size="icon" variant="ghost">
-                                <MoreHorizontalIcon className="h-4 w-4" />
-                                <span className="sr-only">User actions</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
-                              {/* <DropdownMenuItem>Update</DropdownMenuItem> */}
-                              <DropdownMenuItem
-                                onClick={() => handleDelete(item.driver_id)}
-                              >
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  }
-                )}
+                {vehicles.map((item: any) => {
+                  return (
+                    //assignment_id | vehicle_id | driver_id | route_id | start_date | return_date | status
+                    <TableRow key={item.assignment_id}>
+                      <TableCell className="font-medium">
+                        {item.assignment_id}
+                      </TableCell>
+                      {/* <TableCell>{item.vehicle_id}</TableCell> */}
+                      <TableCell>{item.vehicle_id}</TableCell>
+                      <TableCell>{item.driver_id}</TableCell>
+                      <TableCell>{item.route_id}</TableCell>
+                      <TableCell>{item.start_date}</TableCell>
+                      <TableCell>{item.return_date}</TableCell>
+                      <TableCell>{item.status}</TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button size="icon" variant="ghost">
+                              <MoreHorizontalIcon className="h-4 w-4" />
+                              <span className="sr-only">User actions</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
+                            {/* <DropdownMenuItem>Update</DropdownMenuItem> */}
+                            <DropdownMenuItem
+                            // onClick={() => handleDelete(item.driver_id)}
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
-              {/* <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium">John Doe</TableCell>
-                  <TableCell>john@example.com</TableCell>
-                  <TableCell>Admin</TableCell>
-                  <TableCell>
-                    <Badge variant="success">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Deactivate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Jane Doe</TableCell>
-                  <TableCell>jane@example.com</TableCell>
-                  <TableCell>Editor</TableCell>
-                  <TableCell>
-                    <Badge variant="success">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Deactivate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Bob Smith</TableCell>
-                  <TableCell>bob@example.com</TableCell>
-                  <TableCell>User</TableCell>
-                  <TableCell>
-                    <Badge variant="danger">Suspended</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Activate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              </TableBody> */}
             </Table>
           </div>
         </main>

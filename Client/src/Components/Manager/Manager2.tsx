@@ -25,7 +25,7 @@ import AddUserModal from "./AddUsermodal/AddUsermodal";
 import { useCookies } from "react-cookie";
 import { LineChartIcon, SettingsIcon } from "lucide-react";
 
-export default function List() {
+export default function Manager2() {
   // const [showModal, setShowModal] = useState(false);
   const [drivers, setDrivers] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -43,7 +43,7 @@ export default function List() {
       const managerEmail = cookies.Email;
       console.log(managerEmail);
       // const url = `http://localhost:4000/manager/getAllDriver/${managerEmail}`;
-      const url = `http://localhost:4000/manager/getAllDriver/${encodeURIComponent(
+      const url = `http://localhost:4000/manager/getAllDriverStatus/${encodeURIComponent(
         managerEmail
       )}`;
       console.log(url);
@@ -57,12 +57,12 @@ export default function List() {
       });
       console.log(response);
       const data = await response.json();
-      console.log(data);
+      //   console.log(data);
       const drivers = data.data.driver;
-      console.log(drivers);
+      //   console.log(drivers);
       setDrivers(drivers);
     } catch (e) {
-      console.error(e);
+      //   console.error(e);
     }
   };
   // console.log(manager);
@@ -110,14 +110,14 @@ export default function List() {
             <nav className="grid items-start px-4 text-sm font-medium">
               <Link
                 className="flex items-center gap-3 rounded-lg bg-black-100 px-3 py-2 text-gray-900 transition-all hover:text-gray-900 dark:text-gray-50 dark:hover:text-gray-50"
-                to="#"
+                to="/Manager"
               >
                 <UsersIcon className="h-4 w-4" />
                 Drivers
               </Link>
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                to="/Manager/driver"
+                to="#"
               >
                 <LineChartIcon className="h-4 w-4" />
                 Drivers Status
@@ -136,6 +136,7 @@ export default function List() {
                 <SettingsIcon className="h-4 w-4" />
                 Vehicle Status
               </Link>
+
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
                 to="/Manager/insurancerecord"
@@ -233,14 +234,13 @@ export default function List() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className=" bg-black">Name</TableHead>
-                  <TableHead className=" bg-black">Salary</TableHead>
-                  <TableHead className=" bg-black">License</TableHead>
-                  <TableHead className=" bg-black">Contact</TableHead>
+                  <TableHead className=" bg-black">driver_id</TableHead>
+                  <TableHead className=" bg-black">branch</TableHead>
+                  <TableHead className=" bg-black">currentLocation</TableHead>
+                  <TableHead className=" bg-black">Status</TableHead>
                   <TableHead className="text-right bg-black">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-
               <TableBody>
                 {drivers.map(
                   (item: {
@@ -253,11 +253,11 @@ export default function List() {
                     return (
                       <TableRow key={item.driver_id}>
                         <TableCell className="font-medium">
-                          {item.name}
+                          {item.driver_id}
                         </TableCell>
-                        <TableCell>{item.salary}</TableCell>
-                        <TableCell>{item.license}</TableCell>
-                        <TableCell>{item.contact}</TableCell>
+                        <TableCell>{item.branch}</TableCell>
+                        <TableCell>{item.current_location}</TableCell>
+                        <TableCell>{item.status}</TableCell>
                         <TableCell className="text-right">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -282,77 +282,6 @@ export default function List() {
                   }
                 )}
               </TableBody>
-              {/* <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium">John Doe</TableCell>
-                  <TableCell>john@example.com</TableCell>
-                  <TableCell>Admin</TableCell>
-                  <TableCell>
-                    <Badge variant="success">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Deactivate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Jane Doe</TableCell>
-                  <TableCell>jane@example.com</TableCell>
-                  <TableCell>Editor</TableCell>
-                  <TableCell>
-                    <Badge variant="success">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Deactivate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Bob Smith</TableCell>
-                  <TableCell>bob@example.com</TableCell>
-                  <TableCell>User</TableCell>
-                  <TableCell>
-                    <Badge variant="danger">Suspended</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Activate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              </TableBody> */}
             </Table>
           </div>
         </main>

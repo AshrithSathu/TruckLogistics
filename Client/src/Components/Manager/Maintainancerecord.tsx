@@ -25,9 +25,9 @@ import AddUserModal from "./AddUsermodal/AddUsermodal";
 import { useCookies } from "react-cookie";
 import { LineChartIcon, SettingsIcon } from "lucide-react";
 
-export default function List() {
+export default function Maintainancerecord() {
   // const [showModal, setShowModal] = useState(false);
-  const [drivers, setDrivers] = useState([]);
+  const [insurancess, setInsurance] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies();
 
   const handleLogout = async (id: any) => {
@@ -35,7 +35,7 @@ export default function List() {
     removeCookie("Email");
     window.location.href = "/auth";
   };
-
+  // vehicle_id | license_plate |         model          | commissioned_on | mileage |  branch
   const getData = async () => {
     try {
       console.log("hello");
@@ -43,10 +43,10 @@ export default function List() {
       const managerEmail = cookies.Email;
       console.log(managerEmail);
       // const url = `http://localhost:4000/manager/getAllDriver/${managerEmail}`;
-      const url = `http://localhost:4000/manager/getAllDriver/${encodeURIComponent(
+      const url = `http://localhost:4000/manager/getAllMaintenance/${encodeURIComponent(
         managerEmail
       )}`;
-      console.log(url);
+      // console.log(url);
 
       const response = await fetch(url, {
         method: "GET", // Correct method
@@ -55,38 +55,38 @@ export default function List() {
         },
         // Removed the body property since GET requests cannot have a body
       });
-      console.log(response);
+      // console.log(response);
       const data = await response.json();
       console.log(data);
-      const drivers = data.data.driver;
-      console.log(drivers);
-      setDrivers(drivers);
+      const insurances = data.data.maintenancesb;
+      console.log(insurances);
+      setInsurance(insurances);
     } catch (e) {
-      console.error(e);
+      //   console.error(e);
     }
   };
   // console.log(manager);
   useEffect(() => {
     getData();
-  }, [setDrivers]);
+  }, [setInsurance]);
 
   // console.log(manager);
-  //handleDelete
-  const handleDelete = async (id: any) => {
-    try {
-      const response = await fetch(
-        `http://localhost:4000/manager/driver/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
-      const data = await response.json();
-      console.log(data);
-      getData();
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // //handleDelete
+  // const handleDelete = async (id: any) => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:4000/manager/driver/${id}`,
+  //       {
+  //         method: "DELETE",
+  //       }
+  //     );
+  //     const data = await response.json();
+  //     console.log(data);
+  //     getData();
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   return (
     <div className="grid min-h-screen w-full grid-cols-[280px_1fr]">
@@ -110,11 +110,12 @@ export default function List() {
             <nav className="grid items-start px-4 text-sm font-medium">
               <Link
                 className="flex items-center gap-3 rounded-lg bg-black-100 px-3 py-2 text-gray-900 transition-all hover:text-gray-900 dark:text-gray-50 dark:hover:text-gray-50"
-                to="#"
+                to="/Manager"
               >
                 <UsersIcon className="h-4 w-4" />
                 Drivers
               </Link>
+
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
                 to="/Manager/driver"
@@ -136,6 +137,7 @@ export default function List() {
                 <SettingsIcon className="h-4 w-4" />
                 Vehicle Status
               </Link>
+
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
                 to="/Manager/insurancerecord"
@@ -145,7 +147,7 @@ export default function List() {
               </Link>
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                to="/Manager/Maintainancerecord"
+                to="#"
               >
                 <SettingsIcon className="h-4 w-4" />
                 Maintenance Record
@@ -218,7 +220,9 @@ export default function List() {
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="flex items-center">
-            <h1 className="font-semibold text-lg md:text-2xl">Drivers</h1>
+            <h1 className="font-semibold text-lg md:text-2xl">
+              Maintenance Record
+            </h1>
             {/* <Button className="ml-auto scale-95 border-black " size="sm">
               Add User
             </Button> */}
@@ -233,126 +237,49 @@ export default function List() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className=" bg-black">Name</TableHead>
-                  <TableHead className=" bg-black">Salary</TableHead>
-                  <TableHead className=" bg-black">License</TableHead>
-                  <TableHead className=" bg-black">Contact</TableHead>
+                  <TableHead className=" bg-black">description</TableHead>
+                  <TableHead className=" bg-black">date</TableHead>
+                  <TableHead className=" bg-black">type</TableHead>
+                  <TableHead className=" bg-black">bill</TableHead>
+                  <TableHead className=" bg-black">end_date</TableHead>
                   <TableHead className="text-right bg-black">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-
               <TableBody>
-                {drivers.map(
-                  (item: {
-                    driver_id: number;
-                    name: string;
-                    salary: number;
-                    license: string;
-                    contact: string;
-                  }) => {
-                    return (
-                      <TableRow key={item.driver_id}>
-                        <TableCell className="font-medium">
-                          {item.name}
-                        </TableCell>
-                        <TableCell>{item.salary}</TableCell>
-                        <TableCell>{item.license}</TableCell>
-                        <TableCell>{item.contact}</TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button size="icon" variant="ghost">
-                                <MoreHorizontalIcon className="h-4 w-4" />
-                                <span className="sr-only">User actions</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
-                              {/* <DropdownMenuItem>Update</DropdownMenuItem> */}
-                              <DropdownMenuItem
-                                onClick={() => handleDelete(item.driver_id)}
-                              >
-                                Delete
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  }
-                )}
+                {insurancess.map((item: any) => {
+                  return (
+                    <TableRow key={item.policy_id}>
+                      <TableCell className="font-medium">
+                        {item.description}
+                      </TableCell>
+                      {/* <TableCell>{item.vehicle_id}</TableCell> */}
+                      <TableCell>{item.date}</TableCell>
+                      <TableCell>{item.type}</TableCell>
+                      <TableCell>{item.bill}</TableCell>
+                      <TableCell>{item.end_date}</TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button size="icon" variant="ghost">
+                              <MoreHorizontalIcon className="h-4 w-4" />
+                              <span className="sr-only">User actions</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
+                            {/* <DropdownMenuItem>Update</DropdownMenuItem> */}
+                            <DropdownMenuItem
+                            // onClick={() => handleDelete(item.driver_id)}
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
-              {/* <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium">John Doe</TableCell>
-                  <TableCell>john@example.com</TableCell>
-                  <TableCell>Admin</TableCell>
-                  <TableCell>
-                    <Badge variant="success">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Deactivate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Jane Doe</TableCell>
-                  <TableCell>jane@example.com</TableCell>
-                  <TableCell>Editor</TableCell>
-                  <TableCell>
-                    <Badge variant="success">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Deactivate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Bob Smith</TableCell>
-                  <TableCell>bob@example.com</TableCell>
-                  <TableCell>User</TableCell>
-                  <TableCell>
-                    <Badge variant="danger">Suspended</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Activate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              </TableBody> */}
             </Table>
           </div>
         </main>

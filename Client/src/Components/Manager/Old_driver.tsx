@@ -25,7 +25,7 @@ import AddUserModal from "./AddUsermodal/AddUsermodal";
 import { useCookies } from "react-cookie";
 import { LineChartIcon, SettingsIcon } from "lucide-react";
 
-export default function List() {
+export default function Old_driver() {
   // const [showModal, setShowModal] = useState(false);
   const [drivers, setDrivers] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -43,7 +43,7 @@ export default function List() {
       const managerEmail = cookies.Email;
       console.log(managerEmail);
       // const url = `http://localhost:4000/manager/getAllDriver/${managerEmail}`;
-      const url = `http://localhost:4000/manager/getAllDriver/${encodeURIComponent(
+      const url = `http://localhost:4000/manager/getAllOldDriver/${encodeURIComponent(
         managerEmail
       )}`;
       console.log(url);
@@ -58,7 +58,7 @@ export default function List() {
       console.log(response);
       const data = await response.json();
       console.log(data);
-      const drivers = data.data.driver;
+      const drivers = data.data.olddriver;
       console.log(drivers);
       setDrivers(drivers);
     } catch (e) {
@@ -218,7 +218,7 @@ export default function List() {
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="flex items-center">
-            <h1 className="font-semibold text-lg md:text-2xl">Drivers</h1>
+            <h1 className="font-semibold text-lg md:text-2xl">Old Drivers</h1>
             {/* <Button className="ml-auto scale-95 border-black " size="sm">
               Add User
             </Button> */}
@@ -270,7 +270,7 @@ export default function List() {
                               {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
                               {/* <DropdownMenuItem>Update</DropdownMenuItem> */}
                               <DropdownMenuItem
-                                onClick={() => handleDelete(item.driver_id)}
+                              // onClick={() => handleDelete(item.manager_id)}
                               >
                                 Delete
                               </DropdownMenuItem>
@@ -282,77 +282,6 @@ export default function List() {
                   }
                 )}
               </TableBody>
-              {/* <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium">John Doe</TableCell>
-                  <TableCell>john@example.com</TableCell>
-                  <TableCell>Admin</TableCell>
-                  <TableCell>
-                    <Badge variant="success">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Deactivate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Jane Doe</TableCell>
-                  <TableCell>jane@example.com</TableCell>
-                  <TableCell>Editor</TableCell>
-                  <TableCell>
-                    <Badge variant="success">Active</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Deactivate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium">Bob Smith</TableCell>
-                  <TableCell>bob@example.com</TableCell>
-                  <TableCell>User</TableCell>
-                  <TableCell>
-                    <Badge variant="danger">Suspended</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button size="icon" variant="ghost">
-                          <MoreHorizontalIcon className="h-4 w-4" />
-                          <span className="sr-only">User actions</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit</DropdownMenuItem>
-                        <DropdownMenuItem>Activate</DropdownMenuItem>
-                        <DropdownMenuItem>Delete</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              </TableBody> */}
             </Table>
           </div>
         </main>
